@@ -1,0 +1,29 @@
+pre.shiki {
+  padding: 0;
+  max-width: initial;
+}
+
+pre.shiki code {
+  padding: 1em 1.5em;
+  max-width: initial;
+  font-size: 16px;
+  font-family: "Cascadia Code PL", "Monaco", "Lucida Console", "Consolas", monospace;
+}
+
+.nuxt-content-highlight {
+  position: relative;
+}
+
+.nuxt-content-highlight .filename {
+  position: absolute;
+  top: 0.25rem;
+  right: 0.5rem;
+  color: #ccc;
+  font-family: "Cascadia Code PL", "Monaco", "Lucida Console", "Consolas", monospace;
+}
+
+.clearfix::after {
+  display: block;
+  content: " ";
+  clear: both;
+}
