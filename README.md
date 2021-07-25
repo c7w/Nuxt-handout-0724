@@ -2,7 +2,7 @@
 
 ## 作业要求
 
-截止日期为2021年8月1日23：59.
+截止时间为2021年8月1日23：59.
 
 本次作业为你提供了一个框架，你需要在这个框架之上实现一个简单的博客页面。
 
@@ -13,16 +13,18 @@
 - 主页点击标签可以进行筛选
 
 你要完成的任务如下。每题各问不分先后，你可以先完成简答题再完成代码填空。
-满分100分，此外有10分附加分。
+满分100分+100分。
 
 你需要在**报告文件`report.pdf`内写明邮箱、姓名、班级、学号**，然后提交。
 提交方法如下：
+
 ```text
 学号_班级_姓名
-|___ code        ... 此文件夹内放置提供的工程，使得 `packages.json` 直接位于其下。
-|___ report.pdf  ... 作业简答题的PDF文件，按照题号逐题给出。只接受PDF。
-|___ weather.jpg ... JPG 格式，主页天气信息组件渲染效果截图。
-|___ article.jpg ... JPG 格式，任意文章页面的渲染效果截图。
+|___ code              ... 此文件夹内放置提供的工程，使得 `packages.json` 直接位于其下。
+|___ report.pdf        ... 作业简答题的PDF文件，按照题号逐题给出。只接受PDF。
+|___ report_extra.pdf  ... 作业第四题（附加题）的PDF文件。只接受PDF。
+|___ weather.jpg      ... JPG 格式，主页天气信息组件渲染效果截图。
+|___ article.jpg      ... JPG 格式，任意文章页面的渲染效果截图。
 ```
 然后打包上述文件夹为 `学号_班级_姓名.zip` (只接受zip)，发送到 `me@panda2134.site`. 
 
@@ -38,13 +40,13 @@
      相比 [Fetch API](https://developer.mozilla.org/zh-CN/docs/Web/API/Fetch_API) 呢？
    - （2分）解释：在加载时为什么放置 `vue-content-placeholder`？
      用 `v-if` 判断未加载完什么都不显示不行吗？哪种方法更好？
-2. 修改 `pages/article/_id.vue`。（30分+10分）
+2. 修改 `pages/article/_id.vue`。（40分）
    - 这个页面的逻辑是利用 Nuxt Content 模块读取 `content/article` 目录下的博文内容并且显示。
      提示：`this.$route.params.id` 存放着参数 `id`. 你可以参考 `pages/about.vue` 进行实现。
-   - （5分）编程：利用 [`validate`](https://nuxtjs.org/docs/2.x/components-glossary/pages-validate)
+   - （10分）编程：利用 [`validate`](https://nuxtjs.org/docs/2.x/components-glossary/pages-validate)
      接口，实现对参数 `id` 的检验；如果 `content/article` 下没有文件名等于 `id` （不考虑扩展名）的
      文件，则返回 `false` 说明页面不存在，此时 HTTP 状态码自动设为 404。
-   - （15分）编程：在 `async fetch()` 中补充读取当前文章并显示的实现。
+   - （20分）编程：在 `async fetch()` 中补充读取当前文章并显示的实现。
      同时，在 Vuex Store 中设置页面标题和副标题，以更新 `layouts/default.vue` 中对应的显示。
    - （3分）解释：Vuex Store 中 Mutation 和 Action 的区别是什么？
    - （5分） 解释：`this.$content` 是怎么用来读取文章内容的？可以参考 [Fetching Content](https://content.nuxtjs.org/fetching/)
@@ -52,14 +54,20 @@
      [进行显示](https://content.nuxtjs.org/displaying) ？
    - （2分）解释：`middleware/title.js` 作用是什么？如果有页面设置了 Vuex 中标题为特定值，
      跳转到下个路由页面后这个新标题会保留吗？
-   - （附加题，10分）解释：我是如何把 Nuxt Content 自带的 [PrismJS](https://prismjs.com/) 高亮替换为 [Shiki](https://shiki.matsu.io/)
+   - （附加题，20分）解释：代码中如何把 Nuxt Content 自带的 [PrismJS](https://prismjs.com/) 高亮替换为 [Shiki](https://shiki.matsu.io/)
      高亮器的？阅读 `nuxt.config.js` 和 `utils/highlighter.js` 解释之。
-
 3. 阅读主页代码 `pages/index.vue`。（20分）
    - 解释（5分）：主页中如何统计的所有标签？可以参考 [lodash 文档](https://lodash.com/docs/4.17.15) .
    - 解释（15分）：主页中如何实现的按照标签筛选？
      - （5分）为什么使用 `computed` 属性，而不是 `methods` 呢？
      - （10分）为什么要采用 `decodeURIComponent` 呢？
+4. （附加题，80分）在此基础上继续开发，给博客增加按照分类浏览、按照月份归档、评论等功能。
+   - 可以采用 JAMStack 架构，用 [gotell](https://github.com/netlify/gotell) 等 API 实现评论，并且部署在 [Netlify](https://netlify.com/) / [GitHub Pages](https://pages.github.com/) 等服务器 （自行解决网络问题）；
+   - 也可以采用前几天讲解的 Express 开发评论管理 RESTful API 接口，并用 Nuxt.js 调用之。
+   - 80分会综合部署方法、页面美观程度、文档情况等给出。
+   - `report_extra.pdf` 不得超过 2 面 A4 纸，请在此文档描述开发和部署的过程中遇到的问题，以及采用的架构等。
+
+-------
 
 天气 API 简单介绍如下。
 

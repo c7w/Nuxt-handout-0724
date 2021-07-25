@@ -13,16 +13,20 @@
 <script>
 export default {
   async validate ({ params, $content }) {
-    /*
-      TODO: use $content to fetch the article;
-      return false if any exception is raised
-    */
+    try {
+      this.article = await $content('article', params.id).fetch()
+    } catch (error) {
+      return false
+    }
+    return true
   },
   data () {
     return { article: null }
   },
   async fetch () {
-    /* TODO: use this.$content to fetch page content */
+    this.article = await this.$content('article', this.$route.params.id).fetch()
+    this.$store.commit('setTitle', this.article.title)
+    this.$store.commit('setSubtitle', this.article.description)
   },
   head () {
     return {

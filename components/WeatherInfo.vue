@@ -34,6 +34,26 @@ export default {
   },
   async fetch () {
     // TODO: fetch the weather from API
+    const queryParams = {}
+    queryParams.aqi = 'no'
+    queryParams.q = this.city
+    queryParams.key = this.$config.WEATHER_API_KEY
+
+    const baseUrl = 'https://api.weatherapi.com/v1/current.json'
+    let url = baseUrl + '?'
+    for (const key in queryParams) {
+      url = url + key + '=' + queryParams[key] + '&'
+    }
+    for (let i = 0; i < 5; i++) {
+      let success = true
+      this.currentWeather = await fetch(url)
+        .then(response => response.json())
+        // eslint-disable-next-line node/handle-callback-err
+        .catch((error) => { success = false })
+      if (success) {
+        break
+      }
+    }
   }
 }
 </script>
