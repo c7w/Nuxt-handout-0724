@@ -15,10 +15,16 @@
       </aside>
     </main>
     <section>
-      <aside>
-        <h3>Tags</h3>
+      <aside v-if="tags.length !== 0">
+        <h3>Tags ({{ tags.length }})</h3>
         <sup v-for="tag in tags" :key="tag">
           <nuxt-link :to="`?tag=${encodeURIComponent(tag)}`" style="color:white;">{{ tag }}</nuxt-link>
+        </sup>
+      </aside>
+      <aside v-if="categories.length !== 0">
+        <h3>Categories ({{ categories.length }})</h3>
+        <sup v-for="category in categories" :key="category">
+          <nuxt-link :to="`?category=${encodeURIComponent(category)}`" style="color:white;">{{ category }}</nuxt-link>
         </sup>
       </aside>
       <aside>
@@ -43,6 +49,7 @@ export default {
       .$content('article')
       .sortBy('updatedAt', 'desc')
       .fetch()
+    this.$store.commit('setSubtitle', this.filteredArticles.length + ' Journals in total. Keep blogging!')
   },
   computed: {
     tags () {
@@ -53,8 +60,17 @@ export default {
         .uniq()
         .value()
     },
+    categories () {
+      return _
+        .chain(this.articles)
+        .map(x => x.categories ?? [])
+        .flatten()
+        .uniq()
+        .value()
+    },
     filteredArticles () {
       let queryTag
+      let tagFiltered
       if (Array.isArray(this.$route.query.tag)) {
         queryTag = this.$route.query.tag[0]
       } else {
@@ -62,9 +78,22 @@ export default {
       }
       if (queryTag) {
         const tag = decodeURIComponent(queryTag)
-        return this.articles.filter(x => x.tags && x.tags.includes(tag))
+        tagFiltered = this.articles.filter(x => x.tags && x.tags.includes(tag))
       } else {
-        return this.articles
+        tagFiltered = this.articles
+      }
+
+      let queryCategory
+      if (Array.isArray(this.$route.query.category)) {
+        queryCategory = this.$route.query.category[0]
+      } else {
+        queryCategory = this.$route.query.category
+      }
+      if (queryCategory) {
+        const category = decodeURIComponent(queryCategory)
+        return tagFiltered.filter(x => x.categories && x.categories.includes(category))
+      } else {
+        return tagFiltered
       }
     }
   }
