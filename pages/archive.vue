@@ -1,7 +1,8 @@
+/* eslint-disable vue/require-v-for-key */
 <template>
   <div class="index">
     <main>
-<!--       <aside v-for="x in filteredArticles" :key="x.slug">
+      <!--       <aside v-for="x in filteredArticles" :key="x.slug">
         <h2>
           <nuxt-link
             :to="`/article/${x.slug}`"
@@ -14,20 +15,16 @@
         <a :href="`/article/${x.slug}`">Read more...</a>
       </aside> -->
       <aside>
-          a
+        <div v-for="(value, index) in months" :key="value">
+          <ul class="month"><li>{{ index }}</li></ul>
+          <ul class="article" v-for="article in value" :key="article"><li>{{ article.day }}</li><li>{{ article.article.title }}</li></ul>
+        </div>
       </aside>
     </main>
     <section>
-      <aside v-if="tags.length !== 0">
-        <h3>Tags ({{ tags.length }})</h3>
-        <sup v-for="tag in tags" :key="tag">
-          <nuxt-link :to="`?tag=${encodeURIComponent(tag)}`" style="color:white;">{{ tag }}</nuxt-link>
-        </sup>
-      </aside>
-      <aside v-if="categories.length !== 0">
-        <h3>Categories ({{ categories.length }})</h3>
-        <sup v-for="category in categories" :key="category">
-          <nuxt-link :to="`?category=${encodeURIComponent(category)}`" style="color:white;">{{ category }}</nuxt-link>
+      <aside v-if="months.length !== 0">
+        <!-- Reserved for TOC -->
+        <h3>Months</h3>
         </sup>
       </aside>
     </section>
@@ -35,7 +32,7 @@
 </template>
 
 <script>
-import _ from 'lodash'
+// import _ from 'lodash'
 
 export default {
   data () {
@@ -48,52 +45,23 @@ export default {
       .$content('article')
       .sortBy('updatedAt', 'desc')
       .fetch()
-    this.$store.commit('setSubtitle', this.filteredArticles.length + ' Journals in total. Keep blogging!')
+    this.$store.commit('setSubtitle', this.articles.length + ' Journals in total. Keep blogging!')
   },
   computed: {
-    tags () {
-      return _
-        .chain(this.articles)
-        .map(x => x.tags ?? [])
-        .flatten()
-        .uniq()
-        .value()
-    },
-    categories () {
-      return _
-        .chain(this.articles)
-        .map(x => x.categories ?? [])
-        .flatten()
-        .uniq()
-        .value()
-    },
-    filteredArticles () {
-      let queryTag
-      let tagFiltered
-      if (Array.isArray(this.$route.query.tag)) {
-        queryTag = this.$route.query.tag[0]
-      } else {
-        queryTag = this.$route.query.tag
+    months () {
+      const result = {}
+      for (const article of this.articles) {
+        const time = new Date(article.updatedAt)
+        // const date = time.toLocaleDateString()
+        const key = time.getFullYear() + '.' + (time.getMonth() + 1)
+        const day = (time.getMonth() + 1) + '.' + time.getDate()
+        try {
+          result[key].push({ article, day })
+        } catch (error) {
+          result[key] = [{ article, day }]
+        }
       }
-      if (queryTag) {
-        const tag = decodeURIComponent(queryTag)
-        tagFiltered = this.articles.filter(x => x.tags && x.tags.includes(tag))
-      } else {
-        tagFiltered = this.articles
-      }
-
-      let queryCategory
-      if (Array.isArray(this.$route.query.category)) {
-        queryCategory = this.$route.query.category[0]
-      } else {
-        queryCategory = this.$route.query.category
-      }
-      if (queryCategory) {
-        const category = decodeURIComponent(queryCategory)
-        return tagFiltered.filter(x => x.categories && x.categories.includes(category))
-      } else {
-        return tagFiltered
-      }
+      return result
     }
   }
 }
@@ -112,6 +80,7 @@ export default {
 .index > main {
   margin: 0;
   --width-content: 680px;
+  width: 100%;
 }
 
 h2 > a {
