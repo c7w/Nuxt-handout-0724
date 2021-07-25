@@ -113,6 +113,7 @@ export default {
 .index > main {
   margin: 0;
   --width-content: 680px;
+  width: 100%;
 }
 
 h2 > a {
