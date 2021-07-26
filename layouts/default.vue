@@ -12,6 +12,9 @@
           <li>
             <nuxt-link to="/about">About</nuxt-link>
           </li>
+          <li>
+            <nuxt-link to="/archive">Archive</nuxt-link>
+          </li>
         </ul>
       </nav>
       <h1>{{ $store.state.title }}</h1>

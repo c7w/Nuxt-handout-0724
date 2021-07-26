@@ -10,7 +10,7 @@
           </nuxt-link>
         </h2>
         <nuxt-content :document="{ body: x.excerpt }" />
-        <small>Updated at <vue-time-ago :datetime="x.updatedAt" :auto-update="60" /></small><br>
+        <small>Updated at <vue-time-ago :datetime="x.finalTime" :auto-update="60" /></small><br>
         <a :href="`/article/${x.slug}`">Read more...</a>
       </aside>
     </main>
@@ -45,10 +45,12 @@ export default {
     }
   },
   async fetch () {
-    this.articles = await this
+    const articles = await this
       .$content('article')
-      .sortBy('updatedAt', 'desc')
       .fetch()
+    this.articles = articles.map((article) => { article.finalTime = article.date === undefined ? new Date(article.updatedAt) : new Date(article.date); return article })
+      .sort((a, b) => a.finalTime - b.finalTime)
+      .reverse()
     this.$store.commit('setSubtitle', this.filteredArticles.length + ' Journals in total. Keep blogging!')
   },
   computed: {

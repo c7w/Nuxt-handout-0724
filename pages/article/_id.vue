@@ -1,5 +1,17 @@
 <template>
   <main>
+      <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+      tex2jax: {
+      inlineMath: [ ['$','$'], ["\\(","\\)"] ],
+      processEscapes: true
+      }
+      });
+    </script>
+    <script
+      type="text/javascript"
+      src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"
+    />
     <article v-if="article">
       <nuxt-content :document="article" />
     </article>
@@ -24,7 +36,10 @@ export default {
     return { article: null }
   },
   async fetch () {
-    this.article = await this.$content('article', this.$route.params.id).fetch()
+    this.article = await this.$content(
+      'article',
+      this.$route.params.id
+    ).fetch()
     this.$store.commit('setTitle', this.article.title)
     this.$store.commit('setSubtitle', this.article.description)
   },
@@ -35,3 +50,13 @@ export default {
   }
 }
 </script>
+
+<style>
+.mjx-chtml {
+  outline: 0;
+}
+.MJXc-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+</style>
