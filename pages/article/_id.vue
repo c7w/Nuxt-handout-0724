@@ -1,6 +1,6 @@
 <template>
   <main>
-      <script type="text/x-mathjax-config">
+    <script type="text/x-mathjax-config">
       MathJax.Hub.Config({
       tex2jax: {
       inlineMath: [ ['$','$'], ["\\(","\\)"] ],
@@ -19,6 +19,7 @@
       <content-placeholders-heading :img="true" />
       <content-placeholders-text :lines="6" />
     </content-placeholders>
+    <comments />
   </main>
 </template>
 
