@@ -19,7 +19,7 @@
       <content-placeholders-heading :img="true" />
       <content-placeholders-text :lines="6" />
     </content-placeholders>
-    <comments />
+    <comments :path="'demo-article-' + id" />
   </main>
 </template>
 
@@ -34,9 +34,10 @@ export default {
     return true
   },
   data () {
-    return { article: null }
+    return { article: null, id: null }
   },
   async fetch () {
+    this.id = this.$route.params.id
     this.article = await this.$content(
       'article',
       this.$route.params.id
