@@ -2,13 +2,13 @@
   <div class="Comments">
     <h2>Comments</h2>
     <div class="Input">
-      Nickname &nbsp;&nbsp; <input class="label" id="data.nickname" v-model="nickname">&nbsp;&nbsp;&nbsp;&nbsp;
-      Email&nbsp;&nbsp;<input class="label" id="data.email" v-model="email">
+      Nickname &nbsp;&nbsp; <input id="data.nickname" v-model="nickname" class="label">&nbsp;&nbsp;&nbsp;&nbsp;
+      Email&nbsp;&nbsp;<input id="data.email" v-model="email" class="label">
       <div class="InputBox">
         <textarea id="data.content" v-model="content" placeholder="Your comment..." />
       </div>
       <button :disabled="buttonFinal" @click="postComment">
-          Submit
+        Submit
       </button>
     </div>
     <div v-if="currComment" class="CurrComments">

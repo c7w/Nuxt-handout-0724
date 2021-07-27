@@ -7,13 +7,19 @@
         </a>
         <ul>
           <li>
-            <nuxt-link to="/">Home</nuxt-link>
+            <nuxt-link to="/">
+              Home
+            </nuxt-link>
           </li>
           <li>
-            <nuxt-link to="/about">About</nuxt-link>
+            <nuxt-link to="/about">
+              About
+            </nuxt-link>
           </li>
           <li>
-            <nuxt-link to="/archive">Archive</nuxt-link>
+            <nuxt-link to="/archive">
+              Archive
+            </nuxt-link>
           </li>
         </ul>
       </nav>

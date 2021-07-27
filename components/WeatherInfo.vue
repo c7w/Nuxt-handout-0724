@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="weather" v-if="currentWeather">
+    <div v-if="currentWeather" class="weather">
       <div>
         <img
           :src="currentWeather.current.condition.icon"
@@ -14,7 +14,7 @@
       <small>Location: {{ currentWeather.location.name }}</small>
     </div>
     <content-placeholders v-else>
-      <content-placeholders-heading :img="true"/>
+      <content-placeholders-heading :img="true" />
     </content-placeholders>
   </div>
 </template>
