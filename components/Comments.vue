@@ -1,40 +1,27 @@
 <template>
   <div class="Comments">
-    <h2>Your comment...</h2>
+    <h2>Comments</h2>
     <div class="Input">
-      <table>
-        <tbody>
-          <tr>
-            <td class="label">
-              Nickname<input id="data.nickname" v-model="nickname">
-            </td>
-            <td class="label">
-              Email<input id="data.email" v-model="email">
-            </td>
-            <td class="label">
-              <button :disabled="buttonFinal" @click="postComment">
-                Submit
-              </button>
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      Nickname &nbsp;&nbsp; <input class="label" id="data.nickname" v-model="nickname">&nbsp;&nbsp;&nbsp;&nbsp;
+      Email&nbsp;&nbsp;<input class="label" id="data.email" v-model="email">
       <div class="InputBox">
-        <p>Comment</p>
         <textarea id="data.content" v-model="content" placeholder="Your comment..." />
       </div>
+      <button :disabled="buttonFinal" @click="postComment">
+          Submit
+      </button>
     </div>
     <div v-if="currComment" class="CurrComments">
       <div v-if="currComment.data.length != 0">
-        <div v-for="x in currComment.data" :key="x">
+        <div v-for="x in currComment.data" :key="x+email+x.time" class="CommentContent">
           <hr>
-          <image :src="'https://www.gravatar.com/avatar/'+md5(x.email)" />
-          <p>{{ x.nickname }} {{ x.time }}</p>
+          <p><img :src="getAvatar(x.email)" alt="avatar" loading="lazy" width="64" height="64"></p>
+          <p><span class="Bold">{{ x.nickname }}</span> (<a :href="'mailto://'+x.email">{{ x.email }}</a>) posted <vue-time-ago :datetime="x.time" :auto-update="60" /></p>
           <p>{{ x.content }}</p>
         </div>
       </div>
-      <div v-else>
-        No comments yet! Post your comment now!
+      <div class="PostNow">
+        No more comments! Post your comment now!
       </div>
     </div>
     <p v-else>
@@ -61,7 +48,7 @@ export default {
     }
   },
   async fetch () {
-    const url = 'http://121.5.165.232:10001?path=' + this.path
+    const url = 'http://121.5.165.232:10001?path=' + this.path + '&t=' + Math.random()
     this.currComment = await fetch(url).then(response => response.json())
   },
   computed: {
@@ -105,14 +92,11 @@ export default {
         }
       }
       httpRequest.send(JSON.stringify(body))
-
-      this.content = null
-      this.buttonDisabled = false
-      async function reFetch (path) {
-        const url = 'http://121.5.165.232:10001?path=' + path
-        this.currComment = await fetch(url).then(response => response.json())
-      }
-      setTimeout(reFetch(this.path), 8000)
+      setTimeout(() => { location.reload() }, 2000)
+    },
+    getAvatar (email) {
+      const MD5 = require('crypto-js/md5')
+      return 'https://www.gravatar.com/avatar/' + MD5(email) + '.png'
     }
   }
 }
@@ -120,7 +104,7 @@ export default {
 
 <style scoped>
 .Comments{
-    margin: 0 auto;
+    margin: 20px auto;
     padding: 20px;
     width: 65%;
     background-color: #EDEAE9;
@@ -139,8 +123,13 @@ export default {
     display: table;
 }
 
-.Input table tbody tr .label{
+.Input {
     text-align: center;
+}
+
+.Input .label{
+    display: inline;
+    width: 25%;
 }
 
 .InputBox{
@@ -148,7 +137,7 @@ export default {
 }
 
 .InputBox textarea{
-    width: 590px;
+    width: 90%;
     height: 100px;
     padding: 5px;
     margin: 0 auto;
@@ -157,5 +146,25 @@ export default {
 .CurrComments div div hr{
   margin: 10px 0;
   background-color: red;
+  height: 1.5px;
+}
+
+.CurrComments .PostNow {
+  text-align: center;
+  color: grey;
+  font-weight: bold;
+  margin: 10px auto;
+}
+
+.CurrComments div div img {
+  float: right;
+  overflow: visible;
+  transform:unset;
+  display: inline;
+  border: 1px red;
+}
+
+.CommentContent p .Bold {
+  font-weight: bold;
 }
 </style>
